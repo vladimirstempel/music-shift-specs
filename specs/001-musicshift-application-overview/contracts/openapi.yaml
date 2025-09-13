@@ -1,0 +1,111 @@
+openapi: 3.0.0
+info:
+  title: MusicShift API
+  version: 1.0.0
+paths:
+  /auth/register:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: User registered successfully
+  /auth/login:
+    post:
+      summary: Log in a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: User logged in successfully
+  /connections:
+    get:
+      summary: Get all connections for the current user
+      responses:
+        '200':
+          description: A list of connections
+    post:
+      summary: Create a new connection to a music service
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                platform:
+                  type: string
+                auth_code:
+                  type: string
+      responses:
+        '201':
+          description: Connection created successfully
+  /connections/{id}:
+    delete:
+      summary: Delete a connection
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Connection deleted successfully
+  /transfers:
+    get:
+      summary: Get all transfers for the current user
+      responses:
+        '200':
+          description: A list of transfers
+    post:
+      summary: Create a new transfer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                source_platform:
+                  type: string
+                destination_platform:
+                  type: string
+                items:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '201':
+          description: Transfer created successfully
+  /transfers/{id}:
+    get:
+      summary: Get the status of a transfer
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The transfer status

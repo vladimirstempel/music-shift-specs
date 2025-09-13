@@ -44,7 +44,7 @@ function Initialize-AgentFile($targetFile, $agentName) {
     else { $commands = "# Add commands for $newLang" }
     $content = $content.Replace('[ONLY COMMANDS FOR ACTIVE TECHNOLOGIES]', $commands)
     $content = $content.Replace('[LANGUAGE-SPECIFIC, ONLY FOR LANGUAGES IN USE]', "${newLang}: Follow standard conventions")
-    $content = $content.Replace('[LAST 3 FEATURES AND WHAT THEY ADDED]', "- ${currentBranch}: Added ${newLang} + ${newFramework}")
+    $content = $content.Replace('[LAST 3 FEATURES AND WHAT THEY ADDED]', "- $($currentBranch) - Added ${newLang} + ${newFramework}")
     $content | Set-Content $targetFile -Encoding UTF8
 }
 
@@ -55,7 +55,7 @@ function Update-AgentFile($targetFile, $agentName) {
     if ($newDb -and $newDb -ne 'N/A' -and ($content -notmatch [regex]::Escape($newDb))) { $content = $content -replace '(## Active Technologies\n)', "`$1- $newDb ($currentBranch)`n" }
     if ($content -match '## Recent Changes\n([\s\S]*?)(\n\n|$)') {
         $changesBlock = $matches[1].Trim().Split("`n")
-        $changesBlock = ,"- $currentBranch: Added $newLang + $newFramework" + $changesBlock
+        $changesBlock = ,"- $($currentBranch) - Added $newLang + $newFramework" + $changesBlock
         $changesBlock = $changesBlock | Where-Object { $_ } | Select-Object -First 3
         $joined = ($changesBlock -join "`n")
         $content = [regex]::Replace($content, '## Recent Changes\n([\s\S]*?)(\n\n|$)', "## Recent Changes`n$joined`n`n")
